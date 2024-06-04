@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Settings</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .profile-pic {
+            display: block;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        .upload-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .save-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .save-btn:hover {
+            background-color: #218838;
+        }
+
+        .default-profile-icon {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            color: #adb5bd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="#{PROFILE_SETTINGS}"></h1>
+    <div class="card-body">
+        <div class="form-group">
+            <form action="/file" enctype="multipart/form-data" method="post">
+                <div class="form-group text-center">
+                    <label th:if="${attachmentId == null}" for="file">
+                        <div class="default-profile-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </label>
+                    <label th:if="${attachmentId != null}" for="file">
+                        <img width="50" height="50"  th:src="${'/file/' + attachmentId}" alt="..." class="profile-pic">
+
+                    </label>
+                    <input type="file" id="file" class="form-control" name="file">
+                    <small class="form-text text-muted" th:text="#{PHOTO_UPLOAD}"></small>
+                    <button class="btn save-btn" th:text="#{UPLOAD}"></button>
+                </div>
+            </form>
+        </div>
+        <form action="/profile/settings" method="post">
+            <div class="form-group">
+                <label for="username" th:text="#{USERNAME}"></label>
+                <input type="text" id="username" th:value="${currentUser.username}" name="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="firstName" th:text="#{FIRST_NAME}"></label>
+                <input type="text" id="firstName" th:value="${currentUser.firstName}" name="firstName" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName" th:text="#{LAST_NAME}"></label>
+                <input type="text" id="lastName" th:value="${currentUser.lastName}" name="lastName" class="form-control" required>
+            </div>
+            <button type="submit" class="save-btn" th:text="#{SAVE}">Save</button>
+        </form>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</body>
+</html>

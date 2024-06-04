@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .task-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 20px;
+        }
+
+        .task-title {
+            flex: 1;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .task-title input {
+            font-size: 24px;
+            font-weight: 600;
+            border: none;
+            border-bottom: 2px solid #007bff;
+            border-radius: 0;
+            margin-right: 20px;
+        }
+
+        .task-title input:focus {
+            box-shadow: none;
+            border-color: #0056b3;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .priority-low {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .priority-medium {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .priority-high {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .deadline {
+            display: flex;
+            align-items: center;
+            color: #6c757d;
+        }
+
+        .deadline-icon {
+            margin-right: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+        }
+
+        .btn-edit {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-edit:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-back {
+            background-color: transparent;
+            color: #007bff;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #007bff;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .member-card {
+            padding: 10px 20px;
+            border: 1px solid #e1e4e8;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.3s;
+        }
+
+        .member-card:hover {
+            background-color: #f8f9fa;
+        }
+
+        .member-photo {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .btn-outline-primary {
+            color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .comment {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 70%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: background-color 0.3s;
+        }
+
+        .my-comment {
+            align-self: flex-end;
+            background-color: #007bff;
+            color: #fff;
+            border-top-right-radius: 0;
+        }
+
+        .other-comment {
+            align-self: flex-start;
+            background-color: #e9ecef;
+            color: #333;
+            border-top-left-radius: 0;
+        }
+
+        .comment-details {
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+
+        .comment-author {
+            font-weight: bold;
+        }
+
+        .comment-date {
+            margin-left: 10px;
+            color: white;
+        }
+
+        .comments-section h6 {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .comment-body {
+            font-size: 14px;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload .file-label {
+            display: inline-block;
+            width: auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .file-upload .file-label:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .attachments {
+            margin-top: 20px;
+        }
+
+        .attachment-card {
+            padding: 10px 20px;
+            border: 1px solid #e1e4e8;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s;
+        }
+
+        .attachment-card:hover {
+            background-color: #e2e6ea;
+        }
+
+        .attachment-name {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .btn-download {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-download:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-remove {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-remove:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .comments-section {
+            margin-top: 20px;
+        }
+
+        .comments-section .comment-box {
+            border: 1px solid #e1e4e8;
+            border-radius: 15px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .comments-section .add-comment-form {
+            margin-bottom: 20px;
+        }
+
+        .comment-container {
+            border: 1px solid #ced4da;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="task-container">
+        <div class="task-header">
+            <form th:action="${'/task/title/update/' + task.id}" method="post" style="display: flex; align-items: center;">
+                <div class="task-title">
+                    <input type="text" class="form-control" name="title" th:value="${task.title}">
+                    <div class="priority-badge" th:classappend=" 'priority-' + ${task.priority.toLowerCase()}" th:text="${task.priority}"></div>
+                    <div class="deadline">
+                        <i class="fas fa-clock deadline-icon"></i>
+                        <span th:text="${#dates.format(task.deadline, 'MMM d, yyyy h:mm a')}"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="description-section">
+            <form th:action="${'/task/description/update/' + task.id}" method="post">
+                <div class="form-group d-flex align-items-center">
+                    <label for="description" class="mr-2">Description</label>
+                    <textarea class="form-control flex-grow-1" name="description" id="description" rows="3" th:text="${task.description}"></textarea>
+                    <button class="btn btn-edit ml-2" type="submit">Edit</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="priority-section">
+            <form th:action="${'/task/priority/update/' + task.id}" method="post">
+                <div class="form-group d-flex align-items-center">
+                    <label for="priority" class="mr-2">Priority</label>
+                    <select class="form-control flex-grow-1" id="priority" name="priority">
+                        <option th:each="priority : ${priorities}" th:value="${priority}" th:text="${priority}"></option>
+                    </select>
+                    <button class="btn btn-edit ml-2" type="submit">Update</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="deadline-section">
+            <form th:action="${'/task/deadline/update/' + task.id}" method="post">
+                <div class="form-group d-flex align-items-center">
+                    <label for="deadline" class="mr-2">Deadline</label>
+                    <input type="datetime-local" class="form-control flex-grow-1" name="deadline" id="deadline" th:value="${#dates.format(task.deadline, 'yyyy-MM-dd''T''HH:mm')}">
+                    <button class="btn btn-edit ml-2" type="submit">Update</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="members-section">
+            <label>Members</label>
+            <form th:action="${'/task/members/update/' + task.id}" method="post" class="form-group d-flex align-items-center">
+                <select class="form-control flex-grow-1" id="memberSelect" name="userId">
+                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"></option>
+                </select>
+                <button class="btn btn-outline-primary ml-2" type="submit">Add</button>
+            </form>
+            <div th:each="member : ${task.members}" class="member-card">
+                <img th:src="${member.photo != null ? '/file/' + member.photo.id : '/static/image.png'}" class="member-photo" alt="Member Photo">
+                <span class="member-name" th:text="${member.username}"></span>
+                <a class="btn btn-outline-danger btn-sm" th:href="'/task/member/remove/' + ${task.id} + '/' + ${member.id}">Remove</a>
+            </div>
+        </div>
+
+        <div class="form-group d-flex align-items-center">
+            <form th:action="${'/file/' + task.id}" method="post" enctype="multipart/form-data" class="d-flex w-100">
+                <label for="fileUpload" class="file-upload flex-grow-1">
+                    <input type="file" name="file" id="fileUpload">
+                    <span class="file-label">Choose a file...</span>
+                </label>
+                <button type="submit" class="btn btn-primary ml-2 mt-0">Upload</button>
+            </form>
+        </div>
+
+        <div class="attachments">
+            <h6>Attachments</h6>
+            <div th:each="attachment : ${task.attachments}" class="attachment-card">
+                <span class="attachment-name" th:text="${attachment.contentType}"></span>
+                <div>
+                    <a class="btn btn-download btn-sm" th:href="${'/file/download/' + attachment.id}">Download</a>
+                    <a class="btn btn-remove btn-sm" th:href="${'/file/remove/' + attachment.id + '/' + task.id}">Remove</a>
+                </div>
+            </div>
+        </div>
+        <div class="comments-section">
+            <h6>Comments</h6>
+            <div class="comment-container">
+                <form th:action="${'/task/comment/add/' + task.id}" method="post" class="add-comment-form d-flex align-items-center">
+                    <textarea class="form-control flex-grow-1" id="commentContent" name="commentContent" rows="2" placeholder="Add a comment..."></textarea>
+                    <button type="submit" class="btn btn-primary ml-2">Add Comment</button>
+                </form>
+                <div class="comment-box">
+                    <div th:each="comment : ${task.comments}" class="comment" th:classappend="${comment.user.id == currentUser.id} ? ' my-comment' : ' other-comment'">
+                        <div class="comment-details">
+                            <span class="comment-author" th:text="${comment.user.username}"></span>
+                            <span class="comment-date" th:text="${#dates.format(comment.date, 'MMM d, yyyy h:mm a')}"></span>
+                        </div>
+                        <div class="comment-body" th:text="${comment.text}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="/home" class="btn btn-back mt-4">Back to Home</a>
+    </div>
+</div>
+<script>
+    // Store the scroll position before form submission
+    function storeScrollPosition() {
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+    }
+
+    // Restore the scroll position after form submission
+    function restoreScrollPosition() {
+        const scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition));
+            sessionStorage.removeItem('scrollPosition');
+        }
+    }
+
+    // Attach event listener to all forms
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', () => {
+            storeScrollPosition();
+        });
+    });
+
+    // Restore scroll position on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        restoreScrollPosition();
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

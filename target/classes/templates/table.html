@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .table {
+            width: 100%;
+        }
+        .table th {
+            background-color: #0056b3;
+            color: white;
+            font-weight: bold;
+        }
+        .table td, .table th {
+            padding: 10px;
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
+        }
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .past-deadline {
+            background-color: #fdfa72;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">Task Management System</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Column</th>
+            <th>Description</th>
+            <th>Deadline</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Assigned To</th>
+            <th>Comments</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.title}"></td>
+            <td th:text="${task.column.name}"></td>
+            <td th:text="${task.description}"></td>
+            <td th:text="${#dates.format(task.deadline, 'yyyy-MM-dd''T''HH:mm')}"></td>
+            <td th:text="${task.priority}"></td>
+            <td>
+                <span th:if="${task.pastDeadline}" class="past-deadline">Past Deadline</span>
+                <span th:unless="${task.pastDeadline}">On Time</span>
+            </td>
+            <td>
+                <span th:each="user : ${task.members}" th:text="${user.firstName + ' ' + user.lastName}">
+                    <span th:unless="${user == task.members[task.members.size() - 1]}">, </span>
+                </span>
+            </td>
+            <td th:text="${task.comments.size()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

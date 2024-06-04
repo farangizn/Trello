@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .report-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table th,
+        .report-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .report-table th {
+            background-color: #f2f2f2;
+        }
+
+        .report-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .report-table tr:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="report-container">
+    <div class="report-header">
+        <h1>Status Report</h1>
+    </div>
+    <table class="report-table">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Completed Tasks</th>
+            <th>Late Tasks</th>
+            <th>All Tasks</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="report : ${reportAttributes}">
+            <td th:text="${report.getUsername()}"></td>
+            <td th:text="${report.getCompletedTasksCount()}"></td>
+            <td th:text="${report.getLateTasksCount()}"></td>
+            <td th:text="${report.getAllTasksCount()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

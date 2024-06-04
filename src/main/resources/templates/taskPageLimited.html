@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f7f8fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .task-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .task-title {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .task-column {
+            font-weight: bold;
+            color: #6c757d;
+        }
+
+        .info-text {
+            margin-bottom: 20px;
+        }
+
+        .deadline-section,
+        .members-section {
+            margin-top: 30px;
+        }
+
+        .member-photo {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .member-card .member-name {
+            font-weight: bold;
+        }
+
+        .btn-back {
+            background-color: transparent;
+            color: #007bff;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-back:focus {
+            outline: none;
+        }
+
+        .comment {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 70%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .my-comment {
+            align-self: flex-end;
+            background-color: #007bff;
+            color: #fff;
+            border-top-right-radius: 0;
+        }
+
+        .other-comment {
+            align-self: flex-start;
+            background-color: #e9ecef;
+            color: #333;
+            border-top-left-radius: 0;
+        }
+
+        .comment-details {
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+
+        .comment-author {
+            font-weight: bold;
+        }
+
+        .comment-date {
+            margin-left: 10px;
+        }
+
+        .comments-section h6 {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .comment-body {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="task-container">
+        <div class="task-header">
+            <div class="task-title">
+                <h3 class="info-text" th:text="'Task Title: ' + ${task.title}">Task Title: Task 1</h3>
+            </div>
+            <div class="task-column">
+                <h5 class="info-text" th:text="'Column: ' + ${task.column.name}">Column: To Do</h5>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <p class="info-text" th:text="'Description: ' + ${task.description}">Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+
+        <div class="form-group">
+            <label>Priority</label>
+            <p class="info-text" th:text="'Priority: ' + ${task.priority}">Priority: High</p>
+        </div>
+
+        <div class="deadline-section">
+            <label>Deadline</label>
+            <p class="info-text" th:text="'Deadline: ' + ${#dates.format(task.deadline, 'yyyy-MM-dd''T''HH:mm')}">Deadline: 2024-12-31T23:59</p>
+        </div>
+
+        <div class="members-section">
+            <label>Members</label>
+            <div th:each="member : ${task.members}" class="member-card">
+                <img th:src="${member.photo != null ? '/file/' + member.photo.id : '/static/image.png'}" class="member-photo" alt="Member Photo">
+                <span class="member-name" th:text="${member.username}"></span>
+            </div>
+        </div>
+
+        <div class="comments-section">
+            <h6>Comments</h6>
+            <div th:each="comment : ${task.comments}">
+                <div class="comment" th:classappend="${comment.user != null && comment.user.id == currentUser.id} ? ' my-comment' : ' other-comment'">
+                    <div class="comment-details">
+                        <span class="comment-author" th:text="${comment.user != null ? comment.user.username : 'Anonymous'}"></span>
+                        <span class="comment-date" th:text="${#dates.format(comment.date, 'MMM d, yyyy h:mm a')}"></span>
+                    </div>
+                    <div class="comment-body" th:text="${comment.text}"></div>
+                </div>
+            </div>
+            <form th:action="@{'/user/task/comment/add/' + ${task.id}}" method="post">
+                <textarea class="form-control" id="commentContent" name="commentContent" rows="3" placeholder="Add a comment..."></textarea>
+                <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
+            </form>
+        </div>
+
+        <a href="/user/home" class="btn btn-back mt-4">Back to Home</a>
+
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
