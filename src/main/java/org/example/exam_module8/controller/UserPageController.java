@@ -28,7 +28,6 @@ public class UserPageController {
     private final CommentService commentService;
     private final CurrentUser currentUser;
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/home")
     public String homePageLimited(Model model) {
         List<Column> columns = columnService.getAllColumnsOrdered();
@@ -54,7 +53,6 @@ public class UserPageController {
         return "homeLimited";
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/task/view/{taskId}")
     private String taskPage(@PathVariable Integer taskId, Model model) {
         Optional<Task> taskOptional = taskService.findById(taskId);
@@ -66,7 +64,6 @@ public class UserPageController {
         return "taskPageLimited";
     }
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/task/comment/add/{taskId}")
     public String addComment(@PathVariable Integer taskId, @RequestParam("commentContent") String commentContent) {
         Optional<Task> taskOptional = taskService.findById(taskId);

@@ -27,7 +27,6 @@ public class AttachmentController {
     private final AttachmentContentService attachmentContentService;
     private final TaskService taskService;
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("{id}")
     private void load(HttpServletResponse response, @PathVariable Integer id) {
         try {
@@ -40,7 +39,6 @@ public class AttachmentController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping
     private String upload(@RequestParam MultipartFile file, HttpSession session) throws IOException {
         String ct = file.getContentType();
@@ -59,7 +57,6 @@ public class AttachmentController {
         return "redirect:/profile/settings";
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("{taskId}")
     private String upload(@RequestParam MultipartFile file, HttpSession session, @PathVariable  Integer taskId) throws IOException {
         String ct = file.getContentType();
@@ -86,7 +83,6 @@ public class AttachmentController {
         return "redirect:/task/edit/" + taskId;
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/download/{attachmentId}")
     private void download(HttpServletResponse response, @PathVariable Integer attachmentId) {
         AttachmentContent ac = attachmentContentService.getAttachmentContentByAttachmentId(attachmentId);

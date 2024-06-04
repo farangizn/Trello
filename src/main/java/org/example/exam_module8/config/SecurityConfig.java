@@ -28,7 +28,20 @@ public class SecurityConfig {
             m
                     .requestMatchers("/login", "/register","/css/**", "/")
                     .permitAll()
-                    .requestMatchers("/addTask").hasRole("ADMIN")
+                    .requestMatchers("/addTask",  "/home", "/addColumn",
+                            "/updateTaskColumn", "/updateColumnOrder/*", "/task/column/*",
+                            "/task/column/backEdit/*", "/task/edit/*", "/task/title/update/*",
+                            "/task/description/update/", "/task/priority/update/", "/task/deadline/update/",
+                            "/task/members/update/", "/task/member/remove/")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/user/*").hasRole("USER")
+                    .requestMatchers("/calendar", "/task/view/*",
+                            "/success", "/logout", "/table",
+                            "/task/comment/add/", "/task/filter/me",
+                            "/task/filter/all", "/task/filter/none",
+                            "/task/filter/late", "/task/filter/late/day",
+                            "/task/report/columns", "/task/report/status",
+                            "/profile/settings", "/file/*").hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated();
         });
 

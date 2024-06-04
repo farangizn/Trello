@@ -54,14 +54,12 @@ public class PageController {
         return "register";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/calendar")
     public String calendarPage(Model model) {
         model.addAttribute("tasks", taskService.findAllTasks());
         return "calendar";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/task/view/{id}")
     public String calendarPage(@PathVariable Integer id, Model model) {
         Optional<Task> taskOptional = taskService.findById(id);
@@ -90,7 +88,6 @@ public class PageController {
         return "login";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/success")
     public String success() {
         Optional<User> user = currentUser.get();
@@ -104,19 +101,16 @@ public class PageController {
         return "login";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/logout")
     public String logoutPage() {
         return "logout";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/home")
     public String homePage() {
         return "redirect:/home";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/home")
     public String homePage(Model model) {
         List<Column> columns = columnService.getAllColumnsOrdered();
@@ -142,14 +136,12 @@ public class PageController {
         return "home";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/{taskId}/move-to-column/{newColumnId}")
     public ResponseEntity<?> moveTaskToColumn(@PathVariable Integer taskId, @PathVariable Integer newColumnId) {
         taskService.changeTaskCOlumn(taskId, newColumnId);
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/table")
     public String tablePage(Model model) {
         List<Column> columns = columnService.getAllColumnsOrdered();
@@ -175,7 +167,6 @@ public class PageController {
         return "table";
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/addColumn")
     public String addColumn(@RequestParam("columnName") String columnName) {
         if (!Objects.equals(columnName, "")) {
@@ -186,7 +177,6 @@ public class PageController {
         return "redirect:/home";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/addTask")
     public String addTask(@Valid @RequestParam("columnId") Integer columnId, @RequestParam("title") String taskTitle) {
 
@@ -207,7 +197,6 @@ public class PageController {
         return "redirect:/home";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/updateTaskColumn")
     public String updateTaskColumn(@RequestParam("taskId") Integer taskId, @RequestParam("columnId") Integer columnId) {
         Optional<Task> taskOptional = taskService.findById(taskId);
@@ -223,7 +212,6 @@ public class PageController {
         return "redirect:/home";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/updateColumnOrder/{columnId}/{direction}")
     public String updateColumnOrder(@PathVariable("columnId") Integer columnId, @PathVariable Integer direction) {
         Optional<Column> columnOptional = columnService.findById(columnId);
@@ -263,7 +251,6 @@ public class PageController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/task/column/frontEdit/{taskId}")
     private String editTaskOrderPlus(@PathVariable Integer taskId) {
         Optional<Task> taskOptional = taskService.findById(taskId);
@@ -274,7 +261,6 @@ public class PageController {
         return "redirect:/home";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/task/column/backEdit/{taskId}")
     private String editTaskOrderMinus(@PathVariable Integer taskId) {
         Optional<Task> taskOptional = taskService.findById(taskId);
@@ -285,7 +271,6 @@ public class PageController {
         return "redirect:/home";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/task/edit/{taskId}")
     private String editTaskPage(@PathVariable Integer taskId, Model model) {
         Optional<Task> taskOptional = taskService.findById(taskId);
@@ -297,7 +282,6 @@ public class PageController {
         return "taskPage";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/task/title/update/{id}")
     public String updateTaskTitle(@PathVariable Integer id, @RequestParam("title") String title) {
         Optional<Task> taskOptional = taskService.findById(id);
@@ -309,7 +293,6 @@ public class PageController {
         return "redirect:/task/edit/" + id;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/task/description/update/{id}")
     public String updateTaskDescription(@PathVariable Integer id, @RequestParam("description") String description) {
         Optional<Task> taskOptional = taskService.findById(id);
@@ -321,7 +304,6 @@ public class PageController {
         return "redirect:/task/edit/" + id;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/task/priority/update/{id}")
     public String updateTaskPriority(@PathVariable Integer id, @RequestParam("priority") String priority) {
         Optional<Task> taskOptional = taskService.findById(id);
@@ -333,7 +315,6 @@ public class PageController {
         return "redirect:/task/edit/" + id;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/task/deadline/update/{id}")
     public String updateTaskDeadline(@PathVariable Integer id, @RequestParam("deadline") String deadline) {
         Optional<Task> taskOptional = taskService.findById(id);
@@ -346,7 +327,6 @@ public class PageController {
         return "redirect:/task/edit/" + id;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/task/members/update/{id}")
     public String updateTaskMembers(@PathVariable Integer id, @RequestParam("userId") Integer userId) {
         Optional<Task> taskOptional = taskService.findById(id);
@@ -362,7 +342,6 @@ public class PageController {
         return "redirect:/task/edit/" + id;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/task/member/remove/{taskId}/{memberId}")
     public String removeTaskMember(@PathVariable Integer taskId, @PathVariable Integer memberId) {
         Optional<Task> taskOptional = taskService.findById(taskId);
@@ -378,7 +357,6 @@ public class PageController {
         return "redirect:/task/edit/" + taskId;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/task/comment/add/{taskId}")
     public String addComment(@PathVariable Integer taskId, @RequestParam("commentContent") String commentContent) {
         Optional<Task> taskOptional = taskService.findById(taskId);
@@ -396,7 +374,6 @@ public class PageController {
         return "redirect:/task/edit/" + taskId;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/task/filter/me")
     private String filterMe(Model model) {
         List<Task> tasks = taskService.findAllByUser(currentUser.get().get());
@@ -428,7 +405,6 @@ public class PageController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/task/filter/none")
     private String filterNone(Model model) {
         List<Task> tasks = taskService.findAllByNoUser();
@@ -456,7 +432,6 @@ public class PageController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/task/filter/all")
     private String filterAll(Model model) {
         List<Task> tasks = taskService.findAllTasks();
@@ -474,11 +449,9 @@ public class PageController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/task/filter/late")
     private String filterLate(Model model) {
         List<Task> tasks = new ArrayList<>();
-//        List<Task> tasks = taskService.findAllByNoUser();
 
         for (Task task : taskService.findAllTasks()) {
             if (task.getCompletedAt() == null && task.getDeadline() != null && task.getDeadline().toLocalDateTime().isBefore(LocalDateTime.now())) {
@@ -513,7 +486,6 @@ public class PageController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/task/filter/late/day")
     private String filterLateIn24(Model model) {
 
@@ -526,16 +498,6 @@ public class PageController {
                 tasks.add(task);
             }
         }
-
-//        for (Task task : tasks) {
-//            if (!columnService.findMaxColumn().equals(task.getColumn().getColumnOrder()) && task.getDeadline() != null) {
-//                task.setPastDeadline(task.getDeadline().toLocalDateTime().isBefore(LocalDateTime.now()));
-//                taskService.save(task);
-//            } else {
-//                task.setPastDeadline(false);
-//                taskService.save(task);
-//            }
-//        }
 
         model.addAttribute("currentTasks", tasks);
         List<Column> columns = columnService.getAllColumnsOrdered();
@@ -554,7 +516,6 @@ public class PageController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/task/report/columns")
     private String columnTaskReportPage(Model model) {
         List<Report2> report2s = taskService.report2();
@@ -566,7 +527,6 @@ public class PageController {
         return "columnReport";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/task/report/status")
     private String statusTaskReportPage(Model model) {
         List<Report1> report1s = userService.report1();
@@ -574,7 +534,6 @@ public class PageController {
         return "statusReport";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/profile/settings")
     private String profileSettingsPage(Model model, HttpSession session) {
         if (currentUser.get().isPresent()) {
@@ -586,7 +545,6 @@ public class PageController {
         return "profile";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @PostMapping("/profile/settings")
     public String updateProfileSettings(@RequestParam("username") String username,
                                         @RequestParam("firstName") String firstName,
