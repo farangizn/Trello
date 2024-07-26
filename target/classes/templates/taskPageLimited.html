@@ -170,7 +170,7 @@
         <div class="comments-section">
             <h6>Comments</h6>
             <div th:each="comment : ${task.comments}">
-                <div class="comment" th:classappend="${comment.user != null && comment.user.id == currentUser.id} ? ' my-comment' : ' other-comment'">
+                <div class="comment" th:classappend="${comment.user != null && currentUser != null && comment.user.id == currentUser.id} ? ' my-comment' : ' other-comment'">
                     <div class="comment-details">
                         <span class="comment-author" th:text="${comment.user != null ? comment.user.username : 'Anonymous'}"></span>
                         <span class="comment-date" th:text="${#dates.format(comment.date, 'MMM d, yyyy h:mm a')}"></span>
