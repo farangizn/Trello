@@ -14,18 +14,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CurrentUser {
 
-    private final UserService userService;
-
     public Optional<User> get() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        String name = authentication.getName();
 
-        if (name != null) {
-            User user = userService.findByUsername(name);
-            return Optional.of(user);
-        } else {
-            return Optional.empty();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof User) {
+                return Optional.of((User) principal);
+            }
         }
+
+        return Optional.empty();
     }
 }
